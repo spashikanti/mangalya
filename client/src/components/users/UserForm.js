@@ -3,14 +3,14 @@ import userTypes from "../data/userTypes";
 import classnames from "classnames";
 import TextFieldGroup from "../common/TextFieldGroup";
 import PropTypes from "prop-types";
-import { map } from "lodash/map";
 
 const UserForm = ({ user, onSave, onChange, saving = false, errors = {} }) => {
-//   const userTypeOptions = map(userTypes, (val, key) => (
-//     <option key={val} value={val}>
-//       {key}
-//     </option>
-//   ));
+  const userTypeOptions = Object.keys(userTypes).map((val, key) => (
+    <option key={key} value={val}>
+      {val}
+    </option>
+  ));
+
   return (
     <form onSubmit={onSave}>
       <h2>{user.UserId ? "Edit" : "Add"} User</h2>
@@ -69,7 +69,7 @@ const UserForm = ({ user, onSave, onChange, saving = false, errors = {} }) => {
             Choose User Type
           </option>
           <option key="Profile" value="Profile">Profile</option>
-          {/* {userTypeOptions} */}
+          {userTypeOptions}
         </select>
         {errors.UserType && <div className="alert alert-danger">{errors.UserType}</div>}
       </div>

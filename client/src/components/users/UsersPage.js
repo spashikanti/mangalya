@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import * as userActions from "../../store/actions/userActions";
 import UserList from "./UserList";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import Spinner from "../common/Spinner";
 import { toast } from "react-toastify";
@@ -23,16 +23,21 @@ class UsersPage extends React.Component {
     }
   }
 
-  handleDeleteUser = (user) => {
+  handleDeleteUser = async (user) => {
     debugger;
     const { actions } = this.props;
-    toast.success("User " + user.FirstName + " " + user.LastName + " is deleted!");
-    actions.deleteUser(user).catch(
-      error => {
-        toast.error("Deleted failed for User: "+ user.FirstName + " " + error.message, 
-        { autoClose: false });
-      });
-  }
+    toast.success(
+      "User " + user.FirstName + " " + user.LastName + " is deleted!"
+    );
+    try {
+      actions.deleteUser(user);
+    } catch (error) {
+      toast.error(
+        "Deleted failed for User: " + user.FirstName + " " + error.message,
+        { autoClose: false }
+      );
+    }
+  };
 
   render() {
     return (
@@ -50,10 +55,10 @@ class UsersPage extends React.Component {
             >
               Add User
             </button>
-            <UserList 
-              onDeleteClick={this.handleDeleteUser} 
+            <UserList
+              onDeleteClick={this.handleDeleteUser}
               users={this.props.users}
-             />
+            />
           </>
         )}
       </>

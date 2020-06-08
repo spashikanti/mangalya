@@ -93,11 +93,14 @@ ManageUserPage.defaultProps = {
 };
 
 export function getUserByUserId(users, userId) {
-  return users.find((user) => user.UserId === userId) || null;
+  let existingUser = users.find((user) => user.UserId === userId) || null;
+  if(existingUser){
+    existingUser.EndDate = existingUser.EndDate.substring(0,10);
+  }
+  return existingUser;
 }
 
 function mapStateToProps(state, ownProps) {
-  debugger;
   const userId = ownProps.match.params.userId;
   const user =
     userId && state.users.length > 0
