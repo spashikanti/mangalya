@@ -21,6 +21,7 @@ export const saveUser = (user) => (dispatch) => {
       )
       .catch(error => {
         dispatch(apiCallError(error));
+        throw error;
       });
   } else {
     return fetch("/api/users", {
@@ -49,6 +50,25 @@ export const getAllUsersByOrgId = (orgId) => (dispatch) => {
     )
     .catch(error => {
       dispatch(apiCallError(error));
+      throw error;
+    });
+};
+
+export function deleteUserOptimistic(user){
+  return { type: types.DELETE_USER_OPTIMISTIC, user };
+}
+
+export const deleteUser = (user) => (dispatch) => {
+  dispatch(deleteUserOptimistic(user));
+  return fetch("/api/users/" + user.UserId, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" }
+  })
+    .then(handleErrors)
+    .then(
+      //(userData) => dispatch({ type: types.DELETE_USER_OPTIMISTIC, users: userData })
+    )
+    .catch(error => {
       throw error;
     });
 };

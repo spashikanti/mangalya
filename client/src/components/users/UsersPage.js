@@ -6,6 +6,7 @@ import UserList from "./UserList";
 import { Link, Redirect } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import Spinner from "../common/Spinner";
+import { toast } from "react-toastify";
 
 class UsersPage extends React.Component {
   state = {
@@ -20,6 +21,17 @@ class UsersPage extends React.Component {
         alert("loading users failed " + error);
       });
     }
+  }
+
+  handleDeleteUser = (user) => {
+    debugger;
+    const { actions } = this.props;
+    toast.success("User " + user.FirstName + " " + user.LastName + " is deleted!");
+    actions.deleteUser(user).catch(
+      error => {
+        toast.error("Deleted failed for User: "+ user.FirstName + " " + error.message, 
+        { autoClose: false });
+      });
   }
 
   render() {
@@ -38,7 +50,10 @@ class UsersPage extends React.Component {
             >
               Add User
             </button>
-            <UserList users={this.props.users} />
+            <UserList 
+              onDeleteClick={this.handleDeleteUser} 
+              users={this.props.users}
+             />
           </>
         )}
       </>

@@ -92,4 +92,18 @@ userModel.updateUser = (user) => {
   });
 };
 
+userModel.deleteUser = (userId) => {
+  console.log("delet userid: ", userId);
+  return new Promise((resolve, reject) => {
+    console.log("Inside delete user");
+    pool.query("CALL sp_deleteUser(?)", userId, (err, results) => {
+      if(err){
+        console.log("inside delete error: ", userId);
+        return reject(err);
+      }
+      return resolve(results);
+    });
+  });
+}
+
 module.exports = userModel;

@@ -35,7 +35,7 @@ function ManageUserPage({
     }));
   }
 
-  function formIsValid(){
+  function validateUser(){
     const { FirstName, LastName, UserEmail } = user;
     const errors = {};
 
@@ -50,7 +50,7 @@ function ManageUserPage({
   function handleSave(event) {
     debugger;
     event.preventDefault();
-    if(!formIsValid()) return;
+    if(!validateUser()) return;
     setSaving(true);
     saveUser(user)
       .then(() => {

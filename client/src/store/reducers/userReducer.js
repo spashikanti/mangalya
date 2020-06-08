@@ -8,10 +8,13 @@ const userReducer = (state = initialState.users, action) => {
       case types.GET_ALL_ORG_USERS_SUCCESS:
         return action.users
       case types.CREATE_USER_SUCCESS:
-        return [...state, { ...action.user }];
+        return [...state, { ...action.user[0] }];
       case types.UPDATE_USER_SUCCESS:
+        console.log("update api called");
         return state.map(user => 
-          user.UserId === action.user.UserId ? action.user : user);
+          user.UserId === action.user[0].UserId ? action.user[0] : user);
+      case types.DELETE_USER_OPTIMISTIC:
+        return state.filter(user => user.UserId !== action.user.UserId);
       default:
         return state
     }
