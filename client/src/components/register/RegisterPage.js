@@ -2,15 +2,15 @@ import React from 'react';
 import RegisterForm from './RegisterForm';
 import { connect } from 'react-redux';
 
-import { userCreateRequest } from "../../store/actions/userActions";
+import { saveUser } from "../../store/actions/userActions";
 
 class RegisterPage extends React.Component{    
     render(){
-        const { userCreateRequest } = this.props;
+        const { saveUser } = this.props;
         return(
             <div className="row">
                 <div className="col-md-4 col-md-offset-4">
-                    <RegisterForm userCreateRequest={userCreateRequest} history={this.props.history} />
+                    <RegisterForm saveUser={saveUser} history={this.props.history} />
                 </div>
             </div>
         );
@@ -21,4 +21,4 @@ class RegisterPage extends React.Component{
 //     userCreateRequest: React.PropTypes.func.isRequired
 // }
 
-export default connect(null, {userCreateRequest})(RegisterPage);
+export default connect(null, {saveUser})(RegisterPage);

@@ -1,45 +1,64 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getAllUsersByOrgId } from "../../store/actions/userActions";
+import * as userActions from "../../store/actions/userActions";
 import UserList from "./UserList";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { bindActionCreators } from "redux";
+import Spinner from "../common/Spinner";
 
 class UsersPage extends React.Component {
-  static propTypes = {
-    getAllUsersByOrgId: PropTypes.func.isRequired,
-    users: PropTypes.array.isRequired,
-  };
-
-  static defaultProps = {
-    users: []
+  state = {
+    redirectToAddUserPage: false,
   };
 
   componentDidMount() {
-    debugger;
-    console.log("caling");
-    this.props.getAllUsersByOrgId(2);
+    const { users, actions } = this.props;
+
+    if (users.length === 0) {
+      actions.getAllUsersByOrgId(2).catch((error) => {
+        alert("loading users failed " + error);
+      });
+    }
   }
 
   render() {
-      debugger;
-    console.log(this.props.users);
     return (
       <>
+        {this.state.redirectToAddUserPage && <Redirect to="/user" />}
         <h2>Users</h2>
-        <Link className="btn btn-primary btn-lg" to="/user">Add User</Link>
-        <UserList users={this.props.users} />
+        {this.props.loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <button
+              style={{ marginBottom: 20 }}
+              className="btn btn-primary"
+              onClick={() => this.setState({ redirectToAddUserPage: true })}
+            >
+              Add User
+            </button>
+            <UserList users={this.props.users} />
+          </>
+        )}
       </>
     );
   }
 }
 
+UsersPage.propTypes = {
+  users: PropTypes.array.isRequired,
+  actions: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
+};
+
 const mapStateToProps = (state) => ({
   users: state.users,
+  loading: state.apiCallsInProgress > 0,
 });
 
-const dispatchToProps = (dispatch) => ({
-  getAllUsersByOrgId: (orgId) => dispatch(getAllUsersByOrgId(orgId)),
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(userActions, dispatch),
 });
 
-export default connect(mapStateToProps, dispatchToProps)(UsersPage);
+export default connect(mapStateToProps, mapDispatchToProps)(UsersPage);

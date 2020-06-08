@@ -80,7 +80,7 @@ class RegisterForm extends React.Component {
 
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
-      this.props.userCreateRequest(this.state).then(
+      this.props.saveUser(this.state).then(
         () => {
           debugger;
           this.props.history.push("/");

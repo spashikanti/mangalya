@@ -1,20 +1,62 @@
-import { CREATE_USER, GET_ALL_ORG_USERS } from "./constants";
+import * as types from "./constants";
+import { beginApiCall, apiCallError } from "./apiStatusActions";
 
-export const userCreateRequest = (userData) => (dispatch) => {
-    console.log(userData);
-    return fetch("/api/users", {
-        method: "POST",
-        body: JSON.stringify(userData),
-        headers: {"Content-Type": "application/json"}
+export const saveUser = (user) => (dispatch) => {
+  debugger;
+  console.log(user);
+  dispatch(beginApiCall());
+  if (user.UserId) {
+    return fetch("/api/users/" + user.UserId, {
+      method: "PUT",
+      body: JSON.stringify({
+            ...user,
+            // Parse authorId to a number (in case it was sent as a string).
+            UserId: parseInt(user.UserId, 10)
+          }),
+      headers: { "Content-Type": "application/json" },
     })
-        .then((res) => res.json())
-        .then((userData) => dispatch({ type: CREATE_USER, payload: userData }));
+      .then(handleErrors)
+      .then((userData) =>
+        dispatch({ type: types.UPDATE_USER_SUCCESS, user: userData })
+      )
+      .catch(error => {
+        dispatch(apiCallError(error));
+      });
+  } else {
+    return fetch("/api/users", {
+      method: "POST",
+      body: JSON.stringify({...user}),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then(handleErrors)
+      .then((userData) =>
+        dispatch({ type: types.CREATE_USER_SUCCESS, user: userData })
+      )
+      .catch(error => {
+        debugger;
+        dispatch(apiCallError(error));
+        throw error;
+      });
+  }
 };
 
-
 export const getAllUsersByOrgId = (orgId) => (dispatch) => {
-    console.log("user Actions ", orgId);
-    return fetch("/api/users/"+orgId)
-    .then((res) => res.json())    
-    .then((userData) => dispatch({ type: GET_ALL_ORG_USERS, payload: userData }));
+  dispatch(beginApiCall());
+  return fetch("/api/users/" + orgId)
+    .then(handleErrors)
+    .then((userData) =>
+      dispatch({ type: types.GET_ALL_ORG_USERS_SUCCESS, users: userData })
+    )
+    .catch(error => {
+      dispatch(apiCallError(error));
+      throw error;
+    });
+};
+
+function handleErrors(response) {
+  if (!response.ok) {
+      console.log(response.statusText);
+      throw Error(response.statusText);
+  }
+  return response.json();
 }

@@ -15,10 +15,10 @@ const userModel = function (user) {
 userModel.getAllUsersByOrgId = (orgId) => {
   console.log("user model: ", orgId);
   return new Promise((resolve, reject) => {
-    console.log("inside promise: ", orgId);
+    console.log("inside usermodel promise: ", orgId);
     pool.query("CALL sp_getAllUsersByOrgId(?)", orgId, (err, results) => {
       if(err){
-        console.log("inside error: ", orgId);
+        console.log("inside usermodel error: ", orgId);
         return reject(err);
       }
       return resolve(results);
@@ -47,15 +47,40 @@ userModel.createUser = (user) => {
     pool.query(
       "CALL sp_createUser(?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
-        user.orgId,
-        user.firstName,
-        user.lastName,
-        user.userEmail,
-        user.userPwd,
-        user.mobile,
-        user.userType,
-        user.isActive,
-        user.endDate,
+        user.OrgId,
+        user.FirstName,
+        user.LastName,
+        user.UserEmail,
+        user.UserPwd,
+        user.Mobile,
+        user.UserType,
+        user.IsActive,
+        user.EndDate,
+      ],
+      (err, results) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(results);
+      }
+    );
+  });
+};
+
+userModel.updateUser = (user) => {
+  console.log("update user UserModel: ", user);
+
+  return new Promise((resolve, reject) => {
+    pool.query(
+      "CALL sp_updateUser(?, ?, ?, ?, ?, ?, ?)",
+      [
+        user.UserId,
+        user.UserEmail,
+        user.Mobile,
+        user.EndDate,
+        user.IsActive,
+        user.FirstName,
+        user.LastName
       ],
       (err, results) => {
         if (err) {

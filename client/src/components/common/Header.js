@@ -11,20 +11,13 @@ function Header() {
           </Link>
         </div>
         <div className="collapse navbar-collapse">
-          <ul className="nav navbar-nav navbar-right">
+          <ul className="navbar-nav navbar-right">
             <li>
-              <NavLink to="/courses">Course</NavLink>
-            </li>
-            <li>
-              <NavLink to="/users">Users</NavLink>
-            </li>
-            <li>
-              <NavLink to="/customers">Customers</NavLink>
-            </li>
-            <li>
+              <NavLink to="/users">Users</NavLink> {" | "}
+              <NavLink to="/courses">Course</NavLink> {" | "}
+              <NavLink to="/customers">Customers</NavLink> {" | "}
               <NavLink to="/register">Register</NavLink>
-            </li>
-            <li>
+              {" | "}
               <NavLink to="/login">Login</NavLink>
             </li>
           </ul>

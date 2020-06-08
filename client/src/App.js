@@ -17,6 +17,7 @@ import Customers from './components/Customer/customers';
 import ManageUserPage from './components/users/ManageUserPage';
 import CoursesPage from './components/course/CoursesPage';
 
+
 function App() {
     return (
       <div className="container-fluid">
