@@ -18,7 +18,7 @@
     "classnames": "^2.2.6",
     "concurrently": "^4.1.1",
     "express": "^4.17.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mysql": "^2.18.1",
     "nodemon": "^1.19.1",
     "prop-types": "^15.7.2",
